@@ -89,8 +89,8 @@ This Verilog-based system allows users to select a fluid, input volume, and pay 
 This project is modeled at three levels of abstraction. The files are located in the `Verilog/` directory:
 
 * **Behavioral Modeling:**
-    * [Module (`behaviro.v`)](Verilog/behaviro.v)
-    * [Testbench (`behaviro-tb.v`)](Verilog/behaviro-tb.v)
+    * [Module (`behaviro.v`)](Verilog/behavirol.v)
+    * [Testbench (`behaviro-tb.v`)](Verilog/behavirol-tb.v)
 
 * **Dataflow Modeling:**
     * [Module (`dataflow.v`)](Verilog/dataflow.v)
