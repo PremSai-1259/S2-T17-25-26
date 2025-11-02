@@ -196,3 +196,13 @@ module fluid_dispenser(
         final_price = price - (price * discount_percent / 100);
     end
 endmodule
+```
+---
+
+## References
+
+1. M. Morris Mano, Digital Design, Pearson, 5th Edition, 2013.
+2. R. J. Tocci, N. S. Widmer, Digital Systems: Principles and Applications, Pearson, 10th Edition
+3. A. Kumar, Fundamentals of Digital Circuits, PHI Learning, 4th Edition, 2016.
+4. IEEE Xplore Digital Library, https://ieeexplore.ieee.org
+5. ResearchGate, Coin-operated dispensing system articles, https://www.researchgate.net
