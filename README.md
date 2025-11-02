@@ -38,29 +38,43 @@ The design demonstrates the integration of **finite state machines** and **digit
 ## Functional Block Diagram
 <details>
   <summary>Detail</summary>
- ```text
 COIN-BASED MULTI-FLUID DISPENSER
+──────────────────────────────────────────────────────────────
 
-                  ┌─────────────────────────────┐
-                  │       TESTBENCH (tb)        │
-                  │  • Generates signals         │
-                  │  • Stimulates modules        │
-                  │  • Displays final output     │
-                  └──────────────┬───────────────┘
-                                 │
-       ┌─────────────────────────┼─────────────────────────────┐
-       │                         │                             │
-       ▼                         ▼                             ▼
-┌──────────────────┐     ┌────────────────────────┐     ┌───────────────────────┐
-│  visit_tracker   │     │   fluid_dispenser      │     │   Display Console     │
-│  • Tracks user   │     │  • Calculates price,   │     │  • Prints results in  │
-│    visit count   │     │    discount, stock     │     │    tabular format     │
-└──────────────────┘     └────────────────────────┘     └───────────────────────┘
+                 ┌─────────────────────────────┐
+                 │       TESTBENCH (tb)        │
+                 │  • Generates signals         │
+                 │  • Stimulates modules        │
+                 │  • Displays final output     │
+                 └──────────────┬───────────────┘
+                                │
+        ┌───────────────────────┼──────────────────────────┐
+        │                       │                          │
+        ▼                       ▼                          ▼
+┌──────────────────┐   ┌────────────────────────┐   ┌───────────────────────┐
+│  visit_tracker   │   │    fluid_dispenser     │   │   Display Console     │
+│  • Tracks user   │   │  • Calculates price,   │   │  • Prints results in  │
+│    visit count   │   │    discount, and stock │   │    tabular format     │
+└──────────────────┘   └────────────────────────┘   └───────────────────────┘
 
-MODULE FLOW SEQUENCE:
-[Clock ↑ / Reset] → visit_tracker → visits(count)
-→ fluid_dispenser → compute(price, discount, stock)
-→ print_result (Display) → Console Output Table
+
+MODULE FLOW SEQUENCE
+──────────────────────────────────────────────────────────────
+[ Clock ↑ / Reset ] 
+        ↓
+visit_tracker
+        ↓
+visits (count)
+        ↓
+fluid_dispenser
+        ↓
+Compute (price + discount + stock)
+        ↓
+print_result (Display)
+        ↓
+Console Output Table
+──────────────────────────────────────────────────────────────
+
 
 
 </details>
