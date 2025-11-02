@@ -22,19 +22,17 @@
 ## Abstract
 <details>
   <summary>Detail</summary>
-> **Background:**  
-> Beverage dispensing in public spaces such as stations, schools, and workplaces must be both economical and user-friendly. Traditional dispensers are limited to one fluid and require supervision, often leading to wastage or misuse.  
->  
-> **Motivation:**  
-> The goal is to design a digital logic-based dispenser that accepts coins, offers multiple fluids, and dispenses quantities according to price–volume proportions. Using sequential and combinational logic, the system can operate autonomously with low cost and high reliability.  
->  
-> **System Features:**  
-> - Supports three fluids: *Water, Utility Chemical, Soft Drink*  
-> - Each fluid follows its own price–volume ratio  
-> - Loyalty discounts based on visit count (up to 50% for water, 20% for chemical, 30% for soft drink)  
-> - Safety features include overflow prevention, refill alerts, and manual refill options  
->  
-> The design demonstrates the integration of **finite state machines** and **digital logic** in a real-world application combining multi-fluid dispensing, dynamic pricing, and customer incentives.
+Background:Beverage dispensing in public spaces such as stations, schools, and workplaces must be both economical and user-friendly. Traditional dispensers are limited to one fluid and require supervision, often leading to wastage or misuse.  
+
+Motivation:The goal is to design a digital logic-based dispenser that accepts coins, offers multiple fluids, and dispenses quantities according to price–volume proportions. Using sequential and combinational logic, the system can operate autonomously with low cost and high reliability.  
+
+System Features:
+- Supports three fluids: *Water, Utility Chemical, Soft Drink*  
+- Each fluid follows its own price–volume ratio  
+- Loyalty discounts based on visit count (up to 50% for water, 20% for chemical, 30% for soft drink)  
+- Safety features include overflow prevention, refill alerts, and manual refill options  
+ 
+The design demonstrates the integration of **finite state machines** and **digital logic** in a real-world application combining multi-fluid dispensing, dynamic pricing, and customer incentives.
 </details>
 
 ## Functional Block Diagram
