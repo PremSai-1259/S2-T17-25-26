@@ -33,7 +33,7 @@ The design demonstrates the integration of **finite state machines** and **digit
 
 ## 📊 Functional Block Diagram
 
-![Functional Block Diagram](.Snapshots/block.png)
+![Functional Block Diagram](./Snapshots/block.png)
 
 *(This is a placeholder. Replace the URL with your actual block diagram image.)*
 
