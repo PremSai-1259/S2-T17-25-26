@@ -79,7 +79,15 @@ This Verilog-based system allows users to select a fluid, input volume, and pay 
 
 
 
-![Logisim Circuit Diagram](https://i.imgur.com/example.png)
+![Logisim Circuit Diagram](./Snapshots/visit_tracker.jpeg)
+This Module tracks the visits of the user.
+
+![Logisim Circuit Diagram](./Snapshots/discount.jpeg)
+This Module applies discount logic based on the user's visits .
+
+![Logisim Circuit Diagram](./Snapshots/dispenser.jpeg)
+This Module Dispenses fluid and gives final price and update stock.
+
 
 ---
 
