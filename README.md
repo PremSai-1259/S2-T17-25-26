@@ -35,7 +35,7 @@ The design demonstrates the integration of **finite state machines** and **digit
 
 ![Functional Block Diagram](./Snapshots/block.png)
 
-*(This is a placeholder. Replace the URL with your actual block diagram image.)*
+
 
 ---
 
@@ -77,7 +77,7 @@ This Verilog-based system allows users to select a fluid, input volume, and pay 
 
 ## 💡 Logisim Circuit Diagram
 
-*(Placeholder for your Logisim circuit diagram image.)*
+
 
 ![Logisim Circuit Diagram](https://i.imgur.com/example.png)
 
