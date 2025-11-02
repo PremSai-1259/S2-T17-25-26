@@ -22,89 +22,47 @@
 ## Abstract
 <details>
   <summary>Detail</summary>
->Background: Beverage dispensing in public spaces such as stations, schools, and workplaces must
-be both economical and user-friendly. Traditional dispensers are usually limited to a single liquid,
-require supervision, and often lead to wastage or unequal usage. There is a strong need for an
-automated and flexible solution that can dispense multiple fluids, maintain hygiene, and ensure
-cost-effective operation.
-Motivation: With increasing demand for self-service machines, the aim is to design a dispenser
-that accepts coin denominations, allows users to choose from multiple fluids, and delivers the required
-quantity according to predefined price–volume proportions. By embedding this functionality through
-digital logic and finite state machines, the system becomes low-cost, reliable, and suitable for large-
-scale deployment without continuous monitoring.
-System Features and Contribution: The proposed design supports three distinct fluids —
-water, a utility chemical, and a soft drink. Each fluid follows its own pricing-to-volume
-proportion. For example, water may be supplied at progressively reduced rates for higher volumes,
-ensuring affordability for daily usage, while the chemical and soft drink follow different proportion
-scales based on their nature and cost.
-To encourage repeated use, the system also introduces a progressive discount mechanism.
-A customer’s first transaction is charged at the standard rate. On subsequent visits, discounts are
-1
-applied in steps of 10% until a maximum threshold is reached. The maximum allowable discount is
-fluid-specific: up to 50% for water, 20% for the chemical, and 30% for the soft drink. This ensures
-fair pricing while rewarding loyal customers and preventing misuse.
-Additional safety and reliability features include overflow prevention, low-level indicators
-for refilling tanks, and a manual refill option. Altogether, the project demonstrates how
-combinational and sequential logic can be integrated into a real-life application that combines multi-
-fluid dispensing, pricing flexibility, and customer-oriented incentives in a single system.
+> **Background:**  
+> Beverage dispensing in public spaces such as stations, schools, and workplaces must be both economical and user-friendly. Traditional dispensers are limited to one fluid and require supervision, often leading to wastage or misuse.  
+>  
+> **Motivation:**  
+> The goal is to design a digital logic-based dispenser that accepts coins, offers multiple fluids, and dispenses quantities according to price–volume proportions. Using sequential and combinational logic, the system can operate autonomously with low cost and high reliability.  
+>  
+> **System Features:**  
+> - Supports three fluids: *Water, Utility Chemical, Soft Drink*  
+> - Each fluid follows its own price–volume ratio  
+> - Loyalty discounts based on visit count (up to 50% for water, 20% for chemical, 30% for soft drink)  
+> - Safety features include overflow prevention, refill alerts, and manual refill options  
+>  
+> The design demonstrates the integration of **finite state machines** and **digital logic** in a real-world application combining multi-fluid dispensing, dynamic pricing, and customer incentives.
 </details>
 
 ## Functional Block Diagram
 <details>
   <summary>Detail</summary>
- 
->================================================================================
-                     COIN-BASED MULTI-FLUID DISPENSER
-================================================================================
+ ```text
+COIN-BASED MULTI-FLUID DISPENSER
 
-                      ┌────────────────────────────────┐
-                      │          TESTBENCH (tb)        │
-                      │────────────────────────────────│
-                      │ Function:                      │
-                      │  - Generates signals           │
-                      │  - Stimulates modules          │
-                      │  - Displays final output       │
-                      └──────────────┬─────────────────┘
-                                     │
-         ┌───────────────────────────┼────────────────────────────┐
-         │                           │                            │
-         ▼                           ▼                            ▼
- ┌──────────────────┐       ┌──────────────────────────┐     ┌──────────────────────────────┐
- │   visit_tracker  │       │     fluid_dispenser      │     │       Display Console        │
- │──────────────────│       │──────────────────────────│     │──────────────────────────────│
- │ Function:        │       │ Function:                │     │ Function:                    │
- │  - Tracks user   │       │  - Calculates price,     │     │  - Prints results in         │
- │    visits count  │       │    discount, stock       │     │    tabular format            │
- └──────────────────┘       └──────────────────────────┘     └──────────────────────────────┘
+                  ┌─────────────────────────────┐
+                  │       TESTBENCH (tb)        │
+                  │  • Generates signals         │
+                  │  • Stimulates modules        │
+                  │  • Displays final output     │
+                  └──────────────┬───────────────┘
+                                 │
+       ┌─────────────────────────┼─────────────────────────────┐
+       │                         │                             │
+       ▼                         ▼                             ▼
+┌──────────────────┐     ┌────────────────────────┐     ┌───────────────────────┐
+│  visit_tracker   │     │   fluid_dispenser      │     │   Display Console     │
+│  • Tracks user   │     │  • Calculates price,   │     │  • Prints results in  │
+│    visit count   │     │    discount, stock     │     │    tabular format     │
+└──────────────────┘     └────────────────────────┘     └───────────────────────┘
 
-
-
-================================================================================
-                              MODULE FLOW SEQUENCE
-================================================================================
-
-   [Clock ↑ or Reset] 
-            │
-            ▼
-     visit_tracker
-        │
-        ▼
-   visits (count)
-        │
-        ▼
-   fluid_dispenser
-        │
-        ▼
-   Compute Price + Discount + Stock
-        │
-        ▼
-   print_result (Display)
-        │
-        ▼
-   Console Output Table
-
-================================================================================
-
+MODULE FLOW SEQUENCE:
+[Clock ↑ / Reset] → visit_tracker → visits(count)
+→ fluid_dispenser → compute(price, discount, stock)
+→ print_result (Display) → Console Output Table
 
 
 </details>
@@ -114,113 +72,49 @@ fluid dispensing, pricing flexibility, and customer-oriented incentives in a sin
 <details>
   <summary>Detail</summary>
 
-  > ```text
-================================================================================
-                     COIN-BASED MULTI-FLUID DISPENSER
-================================================================================
+ PROJECT OVERVIEW:
+This Verilog-based system allows users to select a fluid, input volume, and pay using coins. 
+It computes price dynamically, applies loyalty discounts, and updates remaining stock.
 
-📘 PROJECT OVERVIEW
---------------------------------------------------------------------------------
-This Verilog-based model simulates an automated **Coin-Based Multi-Fluid Dispenser**
-system that allows users to select a type of fluid, specify a quantity, and pay 
-using coins. The system calculates the price dynamically, applies discounts 
-based on user loyalty (number of visits), and updates available fluid stock.
+MODULES:
+1. visit_tracker — Tracks each user's number of visits  
+2. fluid_dispenser — Calculates price, discount, and remaining stock  
+3. display_console — Outputs results in a formatted terminal table  
+4. testbench — Integrates and simulates all modules
 
-It is composed of three main modules:
-1. **visit_tracker**  → Tracks the number of visits per user.
-2. **fluid_dispenser** → Calculates prices, discounts, and remaining stock.
-3. **display_console** → Displays the formatted output in the terminal.
+FUNCTIONAL TABLE:
 
-The **testbench** integrates all modules, drives input signals, and monitors
-output results for verification.
+| Step | Inputs                     | Module          | Function Performed                       | Outputs             |
+|------|----------------------------|-----------------|------------------------------------------|---------------------|
+| 1    | clk, reset                 | visit_tracker   | Initialize or reset counters             | visits = 0          |
+| 2    | user_id                    | visit_tracker   | Increment user's visit count             | visits (updated)    |
+| 3    | fluid_type, volume, visits | fluid_dispenser | Compute base price                       | original_price      |
+| 4    | visits                     | fluid_dispenser | Determine loyalty discount               | discount_percent    |
+| 5    | price, discount            | fluid_dispenser | Apply discount                           | final_price         |
+| 6    | volume                     | fluid_dispenser | Update remaining stock                   | remaining_qty       |
+| 7    | stock                      | fluid_dispenser | Generate status message                  | message             |
+| 8    | All outputs                | display_console | Display formatted table                  | Console Output      |
 
-================================================================================
-                       FUNCTIONAL TABLE — MODULE OPERATION
-================================================================================
-| Step | Input Signals                         | Module Activated     | Function Performed                              | Output Signals                        |
-|------|---------------------------------------|----------------------|--------------------------------------------------|----------------------------------------|
-|  1   | clk, reset                            | visit_tracker        | Initializes or resets visit counts               | visits = 0                             |
-|  2   | user_id entered                       | visit_tracker        | Increments visit count for given user            | visits (updated)                       |
-|  3   | fluid_type, volume_l, visits          | fluid_dispenser      | Calculates price based on fluid type & volume    | original_price                         |
-|  4   | visits                                | fluid_dispenser      | Determines discount based on loyalty (visits)    | discount_percent                       |
-|  5   | discount_percent, original_price      | fluid_dispenser      | Applies discount and updates final price         | final_price                            |
-|  6   | volume_l                              | fluid_dispenser      | Updates remaining fluid stock                    | remaining_qty                          |
-|  7   | remaining_qty                         | fluid_dispenser      | Generates message (OK / RESTOCK)                 | message                                |
-|  8   | All outputs                           | Display Console      | Prints all results neatly in terminal            | Console Table Output                   |
-================================================================================
+FLOWCHART:
 
+START → Input user_id, fluid_type, volume  
+→ VISIT TRACKER → Update visit count  
+→ FLUID DISPENSER → Compute price, discount, stock  
+→ DISPLAY CONSOLE → Show output table → END
 
-================================================================================
-                           FLOWCHART (ASCII REPRESENTATION)
-================================================================================
+SYSTEM DATA FLOW:
+[clk, reset, user_id] → visit_tracker → visits  
+[fluid_type, volume_l] → fluid_dispenser → display_console
 
-                 ┌────────────────────────────────────┐
-                 │          START (RESET=0)           │
-                 └────────────────────────────────────┘
-                                 │
-                                 ▼
-                 ┌────────────────────────────────────┐
-                 │     Input user_id, fluid_type,     │
-                 │          and volume_l              │
-                 └────────────────────────────────────┘
-                                 │
-                                 ▼
-                 ┌────────────────────────────────────┐
-                 │        VISIT TRACKER MODULE         │
-                 │   → Update user visit count         │
-                 └────────────────────────────────────┘
-                                 │
-                                 ▼
-                 ┌────────────────────────────────────┐
-                 │        FLUID DISPENSER MODULE       │
-                 │   → Calculate original price        │
-                 │   → Apply discount (based on visits)│
-                 │   → Compute final price             │
-                 │   → Update remaining stock          │
-                 │   → Generate status message         │
-                 └────────────────────────────────────┘
-                                 │
-                                 ▼
-                 ┌────────────────────────────────────┐
-                 │         DISPLAY CONSOLE             │
-                 │   → Print results:                  │
-                 │     User | Visits | Fluid | Prices  │
-                 │     Discount | Stock | Message      │
-                 └────────────────────────────────────┘
-                                 │
-                                 ▼
-                 ┌────────────────────────────────────┐
-                 │               END                  │
-                 └────────────────────────────────────┘
-================================================================================
+OUTPUT PARAMETERS:
+original_price, final_price, discount_percent, remaining_qty, message
 
+FINAL TERMINAL OUTPUT:
 
-================================================================================
-                           SYSTEM DATA FLOW SUMMARY
-================================================================================
-
-   [clk, reset, user_id] ─────────▶ visit_tracker
-             visits ──────────────▶ fluid_dispenser
-   [fluid_type, volume_l] ───────▶ fluid_dispenser
-             outputs ─────────────▶ display_console
-
-Output Parameters:
-  → original_price
-  → final_price
-  → discount_percent
-  → remaining_qty
-  → message
-
-================================================================================
-                           FINAL TERMINAL OUTPUT FORMAT
-================================================================================
-
-USER | VISITS | FLUID | ORIGINAL PRICE | DISCOUNT | FINAL PRICE | REMAINING | STATUS
-------------------------------------------------------------------------------------
-001  |   03   |  01   |     ₹120       |   10%    |     ₹108     |   85L     |  OK
-002  |   05   |  10   |     ₹200       |   20%    |     ₹160     |   70L     |  RESTOCK
-================================================================================
-
+USER | VISITS | FLUID | ORIGINAL | DISC | FINAL | REMAIN | STATUS  
+-----|---------|--------|----------|------|--------|--------|--------  
+001  |   03   |  01   |   ₹120   | 10%  |  ₹108  |  85L   |  OK  
+002  |   05   |  10   |   ₹200   | 20%  |  ₹160  |  70L   |  RESTOCK
 </details>
 
 <!-- Fourth Section -->
