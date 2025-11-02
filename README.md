@@ -102,8 +102,6 @@ This project is modeled at three levels of abstraction. The files are located in
 
 <br>
 
-<details>
-<summary>
 ---
 
 ## References
