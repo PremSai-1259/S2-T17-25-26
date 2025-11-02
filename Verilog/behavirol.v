@@ -64,7 +64,7 @@ module fluid_dispenser(
                     message = 1;
                 end
                 else begin
-                    price = (first_part * 1000 * 2 / 100) + (second_part * 1000 * 1 / 100);
+                    price = (first_part * 20) + (second_part * 10);
                     water_stock = water_stock - volume;
                     message = 0;
                 end
@@ -75,7 +75,7 @@ module fluid_dispenser(
                     message = 1;
                 end
                 else begin
-                    price = (first_part * 1000 * 5 / 100) + (second_part * 1000 * 3 / 100);
+                    price = (first_part * 50) + (second_part * 30);
                     juice_stock = juice_stock - volume;
                     message = 0;
                 end
@@ -86,7 +86,7 @@ module fluid_dispenser(
                     message = 1;
                 end
                 else begin
-                    price = (first_part * 1000 * 4 / 100) + (second_part * 1000 * 2 / 100);
+                    price = (first_part * 40) + (second_part * 20);
                     chemical_stock = chemical_stock - volume;
                     message = 0;
                 end
