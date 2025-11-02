@@ -85,152 +85,114 @@ This Verilog-based system allows users to select a fluid, input volume, and pay 
 
 ## 💻 Verilog Code
 
-Below is a structural Verilog template for the system.
 
 ```verilog
-// Module 1: Visit Tracker
-module visit_tracker (
+module visit_tracker(
     input clk,
     input reset,
-    input [7:0] user_id,
-    output reg [4:0] visit_count
+    input [3:0] user_id,
+    output reg [7:0] visits
 );
-    // Logic to store and increment visit counts per user_id
-    // (e.g., using a register array or memory)
+    reg [7:0] user_visits [0:15]; // stores visit count per user
+    integer idx;
+
+    // Reset all visits
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            // Reset logic
-            visit_count <= 0;
-        end else begin
-            // Logic to find user and increment visit count
+            for (idx = 0; idx < 16; idx = idx + 1)
+                user_visits[idx] <= 0;
+        end
+        else begin
+            user_visits[user_id] <= user_visits[user_id] + 1;
         end
     end
-endmodule
 
-// Module 2: Fluid Dispenser
-module fluid_dispenser (
-    input [1:0] fluid_type, // 00=Water, 01=Chemical, 10=Soft Drink
-    input [7:0] volume,
-    input [4:0] visit_count,
-    output reg [9:0] original_price,
-    output reg [9:0] final_price,
-    output reg [3:0] discount_percent,
-    output reg [9:0] remaining_qty,
-    output reg [1:0] status // 00=OK, 01=Restock, 10=Overflow
-);
-
-    // Internal registers for stock
-    reg [9:0] stock_water;
-    reg [9:0] stock_chemical;
-    reg [9:0] stock_drink;
-
-    // Combinational logic to calculate price based on fluid_type and volume
-    // Combinational logic to calculate discount based on visit_count
-    // Sequential logic to update stock
+    // Output current user's visits
     always @(*) begin
-        // Price calculation logic
-        // Discount logic
-        // Final price calculation
-        // Stock check and status update
-    end
-
-    // Logic to update stock on clock edge (after dispensing)
-    always @(posedge clk) begin
-        // Update stock_water, stock_chemical, etc.
+        visits = user_visits[user_id];
     end
 endmodule
 
-// Module 3: Display Console (Simulation only)
-module display_console (
-    input clk,
-    input [7:0] user_id,
-    input [4:0] visits,
-    input [1:0] fluid_type,
-    input [9:0] original_price,
-    input [3:0] discount_percent,
-    input [9:0] final_price,
-    input [9:0] remaining_qty,
-    input [1:0] status
+
+module fluid_dispenser(
+    input [1:0] fluid_type,   // 00 = Water, 01 = Juice, 10 = chemical
+    input [7:0] volume_l,     // volume in litres
+    input [7:0] visits,
+    output reg [15:0] original_price,
+    output reg [15:0] final_price,
+    output reg [7:0] discount_percent,
+    output reg [15:0] remaining_qty,
+    output reg [7:0] message
 );
 
-    // Use $display or $monitor to print the formatted table
-    // This module is typically part of the testbench
-    always @(posedge clk) begin
-        $display("USER: %d | VISITS: %d | FLUID: %d | ...",
-                 user_id, visits, fluid_type /* ... etc. */);
-    end
-endmodule
+    // Stocks (in litres)
+    reg [15:0] water_stock;
+    reg [15:0] juice_stock;
+    reg [15:0] chemical_stock;
 
-// Top-Level Testbench
-module tb_multi_fluid_dispenser;
+    real volume;
+    real price;
+    real first_part;
+    real second_part;
 
-    // Inputs
-    reg clk;
-    reg reset;
-    reg [7:0] user_id;
-    reg [1:0] fluid_type;
-    reg [7:0] volume;
-
-    // Outputs
-    wire [4:0] visit_count;
-    wire [9:0] original_price;
-    wire [9:0] final_price;
-    // ... other wires
-
-    // Instantiate modules
-    visit_tracker u_tracker (
-        .clk(clk),
-        .reset(reset),
-        .user_id(user_id),
-        .visit_count(visit_count)
-    );
-
-    fluid_dispenser u_dispenser (
-        .fluid_type(fluid_type),
-        .volume(volume),
-        .visit_count(visit_count),
-        .original_price(original_price),
-        .final_price(final_price),
-        // ... connect other ports
-    );
-
-    display_console u_display (
-        .clk(clk),
-        .user_id(user_id),
-        .visits(visit_count),
-        // ... connect other ports
-    );
-
-    // Clock generation
     initial begin
-        clk = 0;
-        forever #5 clk = ~clk;
+        water_stock = 100;
+        juice_stock = 80;
+        chemical_stock = 60;
     end
 
-    // Test sequence
-    initial begin
-        reset = 1; #10;
-        reset = 0; #10;
+    always @(*) begin
+        volume = volume_l;
+        first_part = (volume >= 1.0) ? 1.0 : volume;
+        second_part = (volume > 1.0) ? (volume - 1.0) : 0.0;
+        price = 0;
 
-        // Test Case 1: User 001, Water
-        user_id = 8'd1;
-        fluid_type = 2'd0; // Water
-        volume = 8'd10;
-        #10;
+        case (fluid_type)
+            2'b00: begin // Water
+                if (water_stock < volume) begin
+                    message = 1;
+                end
+                else begin
+                    price = (first_part * 1000 * 2 / 100) + (second_part * 1000 * 1 / 100);
+                    water_stock = water_stock - volume;
+                    message = 0;
+                end
+                remaining_qty = water_stock;
+            end
+            2'b01: begin // Juice
+                if (juice_stock < volume) begin
+                    message = 1;
+                end
+                else begin
+                    price = (first_part * 1000 * 5 / 100) + (second_part * 1000 * 3 / 100);
+                    juice_stock = juice_stock - volume;
+                    message = 0;
+                end
+                remaining_qty = juice_stock;
+            end
+            2'b10: begin // chemical
+                if (chemical_stock < volume) begin
+                    message = 1;
+                end
+                else begin
+                    price = (first_part * 1000 * 4 / 100) + (second_part * 1000 * 2 / 100);
+                    chemical_stock = chemical_stock - volume;
+                    message = 0;
+                end
+                remaining_qty = chemical_stock;
+            end
+            default: message = 1;
+        endcase
 
-        // Test Case 2: User 002, Soft Drink
-        user_id = 8'd2;
-        fluid_type = 2'd2; // Soft Drink
-        volume = 8'd5;
-        #10;
-        
-        // Test Case 3: User 001 again (check visit count)
-        user_id = 8'd1;
-        fluid_type = 2'd0; // Water
-        volume = 8'd5;
-        #10;
+        // Discount logic
+        if (visits <= 2)
+            discount_percent = 0;
+        else if (visits <= 4)
+            discount_percent = 10;
+        else
+            discount_percent = 20;
 
-        $finish;
+        original_price = price;
+        final_price = price - (price * discount_percent / 100);
     end
-
 endmodule
